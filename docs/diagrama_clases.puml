@@ -1,0 +1,55 @@
+@startuml
+skinparam classAttributeIconSize 0
+class Cliente {
+- id : Long
+- identificador : String
+- nombre : String
+}
+class Vehiculo {
+- id : Long
+- clienteId : Long
+- tipo : String
+- placa : String
+}
+class Mecanico {
+- id : Long
+- nombre : String
+- especialidad : String
+}
+class Repuesto {
+- codigo : String
+- precio : BigDecimal
+- existencia : int
+}
+class Servicio {
+- descripcion : String
+- costo : BigDecimal
+}
+class OrdenTrabajo {
+- id : Long
+- estado : Estado
+- total : BigDecimal
+}
+class CatalogoController
+class CatalogoService
+class CatalogoDAO
+class OrdenesController
+class OrdenService
+class OrdenDAO
+class ReportesController
+class ReportesDAO
+class ConexionBD
+Cliente "1" -- "0..*" Vehiculo
+Vehiculo "1" -- "0..*" OrdenTrabajo
+Mecanico "1" -- "0..*" OrdenTrabajo
+OrdenTrabajo "*" -- "*" Servicio
+OrdenTrabajo "*" -- "*" Repuesto
+CatalogoController --> CatalogoService
+CatalogoService --> CatalogoDAO
+CatalogoDAO --> ConexionBD
+OrdenesController --> OrdenService
+OrdenService --> OrdenDAO
+OrdenDAO --> ConexionBD
+ReportesController --> ReportesDAO
+ReportesDAO --> ConexionBD
+@enduml

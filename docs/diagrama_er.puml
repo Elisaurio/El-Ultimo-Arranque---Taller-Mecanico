@@ -1,0 +1,59 @@
+@startuml
+hide circle
+entity clientes { *id : BIGINT <<PK>>
+ --
+ identificador : VARCHAR UNIQUE
+ nombre : VARCHAR
+ telefono : VARCHAR
+ correo : VARCHAR
+ direccion : VARCHAR }
+entity vehiculos { *id : BIGINT <<PK>>
+ --
+ cliente_id : BIGINT <<FK>>
+ tipo : VARCHAR
+ placa : VARCHAR UNIQUE
+ marca : VARCHAR
+ modelo : VARCHAR
+ anio : SMALLINT }
+entity mecanicos { *id : BIGINT <<PK>>
+ --
+ nombre : VARCHAR
+ especialidad : VARCHAR
+ telefono : VARCHAR }
+entity servicios { *id : BIGINT <<PK>>
+ --
+ descripcion : VARCHAR
+ costo : DECIMAL }
+entity repuestos { *id : BIGINT <<PK>>
+ --
+ codigo : VARCHAR UNIQUE
+ nombre : VARCHAR
+ descripcion : VARCHAR
+ precio : DECIMAL
+ existencia : INT }
+entity ordenes_trabajo { *id : BIGINT <<PK>>
+ --
+ vehiculo_id : BIGINT <<FK>>
+ mecanico_id : BIGINT <<FK>>
+ problema : VARCHAR
+ estado : VARCHAR
+ fecha_creacion : DATETIME
+ fecha_finalizacion : DATETIME
+ total : DECIMAL }
+entity orden_servicios { *orden_id : BIGINT <<PK,FK>>
+ *servicio_id : BIGINT <<PK,FK>>
+ --
+ costo_unitario : DECIMAL }
+entity orden_repuestos { *orden_id : BIGINT <<PK,FK>>
+ *repuesto_id : BIGINT <<PK,FK>>
+ --
+ cantidad : INT
+ precio_unitario : DECIMAL }
+clientes ||--o{ vehiculos
+vehiculos ||--o{ ordenes_trabajo
+mecanicos ||--o{ ordenes_trabajo
+ordenes_trabajo ||--o{ orden_servicios
+servicios ||--o{ orden_servicios
+ordenes_trabajo ||--o{ orden_repuestos
+repuestos ||--o{ orden_repuestos
+@enduml

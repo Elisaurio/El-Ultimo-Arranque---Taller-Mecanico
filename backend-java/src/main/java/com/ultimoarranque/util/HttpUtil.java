@@ -34,7 +34,7 @@ public final class HttpUtil {
         return body;
     }
 
-    private static void aplicarCors(HttpExchange exchange) {
+    public static void aplicarCors(HttpExchange exchange) {
         String origin = exchange.getRequestHeaders().getFirst("Origin");
         if (origin != null && origin.matches("^https?://(localhost|127\\.0\\.0\\.1)(:[0-9]{1,5})?$")) {
             exchange.getResponseHeaders().set("Access-Control-Allow-Origin", origin);

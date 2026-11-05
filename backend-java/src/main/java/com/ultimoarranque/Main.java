@@ -2,6 +2,9 @@ package com.ultimoarranque;
 
 import com.sun.net.httpserver.HttpServer;
 import com.ultimoarranque.controller.ClientesController;
+import com.ultimoarranque.controller.CatalogoController;
+import com.ultimoarranque.controller.OrdenesController;
+import com.ultimoarranque.controller.ReportesController;
 import com.ultimoarranque.util.HttpUtil;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,6 +23,11 @@ public class Main {
             HttpUtil.send(exchange, 200, Map.of("message", "Conexión exitosa con el backend Java"));
         });
         server.createContext("/api/clientes", new ClientesController());
+        for (String modulo : new String[] {"vehiculos", "mecanicos", "servicios", "repuestos"}) {
+            server.createContext("/api/" + modulo, new CatalogoController(modulo));
+        }
+        server.createContext("/api/ordenes", new OrdenesController());
+        server.createContext("/api/reportes", new ReportesController());
         server.setExecutor(Executors.newFixedThreadPool(8));
         server.start();
         System.out.println("Backend Java iniciado en http://localhost:8080");
