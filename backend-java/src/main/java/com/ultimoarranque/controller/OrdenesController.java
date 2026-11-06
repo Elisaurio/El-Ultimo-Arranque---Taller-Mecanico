@@ -48,7 +48,11 @@ public class OrdenesController implements HttpHandler {
             }
             throw new ApiException(405,"Operación no permitida");
         } catch(ApiException e) {HttpUtil.send(x,e.getStatus(),Map.of("message",e.getMessage()));}
-        catch(JsonProcessingException e){HttpUtil.send(x,400,Map.of("message","JSON inválido"));}
+        catch(JsonProcessingException e){
+            System.err.println("ERROR AL GENERAR JSON DE ORDEN: " + e.getOriginalMessage());
+            e.printStackTrace();
+            HttpUtil.send(x,500,Map.of("message","No se pudo convertir la orden a JSON. Revisa la terminal Java."));
+        }
         catch(SQLException e){
             System.err.println("Error SQL de órdenes: "+e.getMessage());
             int code=e.getErrorCode();
@@ -65,6 +69,11 @@ public class OrdenesController implements HttpHandler {
     private Map<String,Object> leer(HttpExchange x) throws IOException {
         byte[] b=HttpUtil.leerCuerpo(x);
         if(b.length==0) throw new ApiException(400,"Faltan datos");
-        return HttpUtil.JSON.readValue(b,new TypeReference<Map<String,Object>>(){});
+        try {
+            return HttpUtil.JSON.readValue(b,new TypeReference<Map<String,Object>>(){});
+        } catch (JsonProcessingException e) {
+            System.err.println("JSON recibido con formato incorrecto: " + e.getOriginalMessage());
+            throw new ApiException(400,"La solicitud de orden contiene JSON inválido");
+        }
     }
 }

@@ -200,8 +200,15 @@ public class OrdenDAO {
         ResultSetMetaData m=r.getMetaData();Map<String,Object> o=new LinkedHashMap<>();
         for(int i=1;i<=m.getColumnCount();i++) {
             Object valor=r.getObject(i);
-            if(valor instanceof Timestamp t) valor=t.toLocalDateTime().toString();
-            o.put(m.getColumnLabel(i),valor);
+            // Las fechas de MySQL deben devolverse como texto para que Jackson no falle.
+            if (valor instanceof Timestamp t) {
+                valor = t.toLocalDateTime().toString();
+            } else if (valor instanceof java.time.temporal.TemporalAccessor) {
+                valor = valor.toString();
+            } else if (valor instanceof java.sql.Date || valor instanceof java.sql.Time) {
+                valor = valor.toString();
+            }
+            o.put(m.getColumnLabel(i), valor);
         }
         return o;
     }
