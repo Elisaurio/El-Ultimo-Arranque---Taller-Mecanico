@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clientes · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head><body><div class="app-shell">
+<aside th:replace="~{fragments/layout :: sidebar('clientes')}"></aside>
+<main class="content">
+<header th:replace="~{fragments/layout :: topbar('Clientes', 'Registro y administración de clientes')}"></header>
+<div class="page-actions"><h2>Clientes registrados</h2><a class="btn primary" th:href="@{/clientes/nuevo}">＋ Nuevo cliente</a></div>
+<div class="notice success" th:if="${exito}" th:text="${exito}"></div>
+<div class="notice error" th:if="${error}" th:text="${error}"></div>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Identificador</th><th>Nombre</th><th>Teléfono</th><th>Correo</th><th>Acciones</th></tr></thead>
+<tbody><tr th:each="c : ${clientes}"><td th:text="${c.identificador}"></td><td th:text="${c.nombre}"></td><td th:text="${c.telefono}"></td><td th:text="${c.correo}"></td>
+<td class="actions"><a th:href="@{/clientes/{id}(id=${c.id})}">Ver</a><a th:href="@{/clientes/{id}/editar(id=${c.id})}">Editar</a><form th:action="@{/clientes/{id}/eliminar(id=${c.id})}" method="post" onsubmit="return confirm('¿Eliminar este cliente?');"><button class="danger-link" type="submit">Eliminar</button></form></td></tr>
+<tr th:if="${#lists.isEmpty(clientes)}"><td colspan="5" class="empty">Todavía no hay clientes registrados. ¡Agrega el primero!</td></tr>
+</tbody></table></div></div>
+</main></div></body></html>

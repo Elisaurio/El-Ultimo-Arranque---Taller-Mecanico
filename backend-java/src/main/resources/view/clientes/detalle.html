@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalle de cliente · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head><body><div class="app-shell">
+<aside th:replace="~{fragments/layout :: sidebar('clientes')}"></aside>
+<main class="content">
+<header th:replace="~{fragments/layout :: topbar('Detalle de cliente', 'Información registrada en MySQL')}"></header>
+<div class="page-actions"><h2 th:text="${cliente.nombre}">Cliente</h2><a class="btn ghost" th:href="@{/clientes}">Volver al listado</a></div>
+<div class="form-card"><dl class="detail-grid"><div><dt>Identificador</dt><dd th:text="${cliente.identificador}"></dd></div><div><dt>Nombre</dt><dd th:text="${cliente.nombre}"></dd></div><div><dt>Teléfono</dt><dd th:text="${cliente.telefono}"></dd></div><div><dt>Correo</dt><dd th:text="${cliente.correo}"></dd></div><div><dt>Dirección</dt><dd th:text="${cliente.direccion}"></dd></div></dl>
+<div class="form-actions"><a class="btn primary" th:href="@{/clientes/{id}/editar(id=${cliente.id})}">Editar cliente</a></div></div>
+</main></div></body></html>

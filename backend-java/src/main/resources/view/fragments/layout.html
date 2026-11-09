@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar(active)" class="sidebar">
+  <a class="brand" th:href="@{/}"><span class="brand-mark">✦</span><span>El Último<br>Arranque</span></a>
+  <p class="side-label">PANEL DEL TALLER</p>
+  <nav aria-label="Navegación principal" class="side-nav">
+    <a th:classappend="${active == 'inicio'} ? ' selected' : ''" th:href="@{/}"><span>⌂</span> Inicio</a>
+    <a th:classappend="${active == 'clientes'} ? ' selected' : ''" th:href="@{/clientes}"><span>♙</span> Clientes</a>
+    <span class="disabled"><span>◇</span> Vehículos <small>Próximamente</small></span>
+    <span class="disabled"><span>⚒</span> Mecánicos <small>Próximamente</small></span>
+    <span class="disabled"><span>▣</span> Repuestos <small>Próximamente</small></span>
+    <span class="disabled"><span>✧</span> Servicios <small>Próximamente</small></span>
+    <span class="disabled"><span>▤</span> Órdenes <small>Próximamente</small></span>
+    <span class="disabled"><span>◫</span> Reportes <small>Próximamente</small></span>
+  </nav>
+  <div class="side-footer">Programación II · MVC<br><small>Java + Spring Boot + MySQL</small></div>
+</aside>
+<header th:fragment="topbar(title, subtitle)" class="topbar">
+  <div><div class="top-eyebrow">EL ÚLTIMO ARRANQUE · GESTIÓN DEL TALLER</div><h1 th:text="${title}">Hola</h1><p th:text="${subtitle}">Bienvenido</p></div>
+  <div class="top-icon" aria-hidden="true">✦</div>
+</header>
+</body>
+</html>

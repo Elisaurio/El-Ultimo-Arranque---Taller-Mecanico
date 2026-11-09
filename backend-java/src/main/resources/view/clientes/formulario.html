@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulario de cliente · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head><body><div class="app-shell">
+<aside th:replace="~{fragments/layout :: sidebar('clientes')}"></aside>
+<main class="content">
+<header th:replace="~{fragments/layout :: topbar('Datos del cliente', 'Completa los campos para guardar la información')}"></header>
+<div class="page-actions"><h2 th:text="${cliente.id == null} ? 'Nuevo cliente' : 'Editar cliente'">Nuevo cliente</h2><a class="btn ghost" th:href="@{/clientes}">Volver</a></div>
+<form class="form-card" th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+<input type="hidden" th:field="*{id}">
+<div class="notice error" th:if="${#fields.hasGlobalErrors()}"><p th:each="e : ${#fields.globalErrors()}" th:text="${e}"></p></div>
+<div class="form-grid">
+<div class="field"><label for="identificador">Identificador *</label><input id="identificador" th:field="*{identificador}" required maxlength="30" placeholder="CLI-001"><small class="validation" th:errors="*{identificador}"></small></div>
+<div class="field"><label for="nombre">Nombre completo *</label><input id="nombre" th:field="*{nombre}" required maxlength="120" placeholder="Nombre del cliente"><small class="validation" th:errors="*{nombre}"></small></div>
+<div class="field"><label for="telefono">Teléfono</label><input id="telefono" th:field="*{telefono}" maxlength="25" placeholder="5555-0000"><small class="validation" th:errors="*{telefono}"></small></div>
+<div class="field"><label for="correo">Correo electrónico</label><input id="correo" th:field="*{correo}" maxlength="150" placeholder="correo@ejemplo.com"><small class="validation" th:errors="*{correo}"></small></div>
+<div class="field full"><label for="direccion">Dirección</label><textarea id="direccion" th:field="*{direccion}" maxlength="255" rows="3"></textarea><small class="validation" th:errors="*{direccion}"></small></div>
+</div><div class="form-actions"><a class="btn ghost" th:href="@{/clientes}">Cancelar</a><button class="btn primary" type="submit">Guardar cliente</button></div>
+</form></main></div></body></html>
