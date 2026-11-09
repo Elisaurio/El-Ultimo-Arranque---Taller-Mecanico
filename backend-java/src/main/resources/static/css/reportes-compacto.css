@@ -1,0 +1,14 @@
+/* Selector de reportes compacto. Solo afecta /reportes. */
+.report-compact-picker{max-width:690px}
+.report-compact-picker h2{margin:0 0 16px;color:#253554;font-size:clamp(19px,2.5vw,24px);line-height:1.3}
+.report-type-list{list-style:none;margin:0;padding:7px;background:#fff;border:1px solid #e4e9f4;border-radius:16px;box-shadow:0 8px 22px rgba(32,58,106,.07)}
+.report-type-list li+li{border-top:1px solid #eef1f8}
+.report-type-list a{display:flex;align-items:center;gap:14px;min-height:56px;padding:11px 16px;border-radius:9px;color:#2a3a58;text-decoration:none;transition:background .15s ease,color .15s ease}
+.report-type-list a:hover{background:#f3f0ff;color:#5935b6}
+.report-type-list a:focus-visible{outline:3px solid #967ce9;outline-offset:-2px}
+.report-type-number{flex:0 0 24px;color:#6747c6;font-size:14px;font-weight:800;text-align:right}
+.report-type-title{flex:1;min-width:0;font-size:15px;font-weight:650;line-height:1.35}
+.report-type-arrow{flex:0 0 auto;font-size:24px;line-height:1;color:#8368d6}
+.selected-report-section{max-width:690px}
+.selected-report-section .selected-report-card{max-width:690px}
+@media(max-width:560px){.report-type-list a{padding:12px 10px;gap:9px}.report-type-title{font-size:14px}.report-type-number{flex-basis:21px}}

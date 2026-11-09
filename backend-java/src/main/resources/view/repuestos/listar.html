@@ -1,7 +1,58 @@
-<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Repuestos · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"></head><body>
-<div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('repuestos')}"></aside><main class="content">
-<header th:replace="~{fragments/layout :: topbar('Repuestos', 'Administración del taller')}"></header>
-<div class="page-actions"><h2>Repuestos registrados</h2><div class="actions"><a class="btn ghost" th:href="@{/repuestos/bajo-inventario}">Inventario ≤ 5</a><a class="btn primary" th:href="@{/repuestos/nuevo}">+ Nuevo repuesto</a></div></div>
-<div th:if="${exito}" class="notice success" th:text="${exito}"></div><div th:if="${error}" class="notice error" th:text="${error}"></div>
-<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Codigo</th><th>Nombre</th><th>Descripcion</th><th>Precio</th><th>Existencia</th><th>Acciones</th></tr></thead><tbody><tr th:each="r : ${registros}"><td th:text="${r.codigo}">—</td><td th:text="${r.nombre}">—</td><td th:text="${r.descripcion}">—</td><td th:text="${r.precio}">—</td><td th:text="${r.existencia}">—</td><td class="actions"><a th:href="@{/repuestos/{id}/abastecer(id=${r.id})}">Abastecer</a><a th:href="@{/repuestos/{id}/editar(id=${r.id})}">Editar</a><form th:action="@{/repuestos/{id}/eliminar(id=${r.id})}" method="post" onsubmit="return confirm('¿Eliminar el registro?');"><button class="danger-link" type="submit">Eliminar</button></form></td></tr><tr th:if="${#lists.isEmpty(registros)}"><td colspan="6" class="empty">No hay registros todavía</td></tr></tbody></table></div></div>
-</main></div></body></html>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Repuestos · El Último Arranque</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css(v=ui6)}">
+</head>
+<body>
+<div class="app-shell">
+  <aside th:replace="~{fragments/layout :: sidebar('repuestos')}"></aside>
+  <main class="content">
+    <header th:replace="~{fragments/layout :: topbar('Repuestos','Catálogo e inventario del taller')}"></header>
+    <div class="page-actions">
+      <h2>Catálogo de repuestos</h2>
+      <div class="actions">
+        <a class="btn ghost" th:href="@{/repuestos/bajo-inventario}">Existencias ≤ 5</a>
+        <a class="btn primary" th:href="@{/repuestos/nuevo}">+ Nuevo repuesto</a>
+      </div>
+    </div>
+    <div th:if="${exito}" class="notice success" th:text="${exito}"></div>
+    <div th:if="${error}" class="notice error" th:text="${error}"></div>
+    <section class="catalog-grid" aria-label="Catálogo de repuestos">
+      <article class="catalog-card" th:each="r : ${registros}">
+        <div class="catalog-card-head">
+          <div class="catalog-card-title">
+            <h3 th:text="${r.nombre}">Nombre del repuesto</h3>
+            <strong class="catalog-price" th:text="|Q ${r.precio}|">Q 0.00</strong>
+          </div>
+          <details class="catalog-menu">
+            <summary th:attr="aria-label=|Opciones del repuesto ${r.nombre}|" title="Ver opciones">⋯</summary>
+            <div class="catalog-menu-panel">
+              <p class="catalog-menu-label">Descripción</p>
+              <p class="catalog-description" th:text="${#strings.isEmpty(r.descripcion) ? 'Sin descripción registrada' : r.descripcion}">Descripción</p>
+              <div class="catalog-menu-divider"></div>
+              <a th:href="@{/repuestos/{id}/abastecer(id=${r.id})}">Abastecer</a>
+              <a th:href="@{/repuestos/{id}/editar(id=${r.id})}">Editar</a>
+              <form th:action="@{/repuestos/{id}/eliminar(id=${r.id})}" method="post"
+                    onsubmit="return confirm('¿Eliminar este repuesto?');">
+                <button type="submit" class="catalog-danger">Eliminar</button>
+              </form>
+            </div>
+          </details>
+        </div>
+        <div class="catalog-card-footer">
+          <span class="catalog-code" th:text="|Código: ${r.codigo}|">Código: REP-001</span>
+          <span class="stock-label" th:classappend="${r.existencia <= 5} ? ' stock-low' : ''"
+                th:text="|${r.existencia} unidades|">0 unidades</span>
+        </div>
+      </article>
+      <div class="catalog-empty" th:if="${#lists.isEmpty(registros)}">
+        Todavía no hay repuestos registrados. Utiliza «Nuevo repuesto» para empezar.
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

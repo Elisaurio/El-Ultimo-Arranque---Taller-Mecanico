@@ -1,22 +1,35 @@
-﻿<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
 <aside th:fragment="sidebar(active)" class="sidebar">
-<a class="brand" th:href="@{/}"><span class="brand-mark">✦</span><span>El Último<br>Arranque</span></a>
-<p class="side-label">PANEL DEL TALLER</p>
-<nav aria-label="Navegación principal" class="side-nav">
-<a th:classappend="${active == 'inicio'} ? ' selected' : ''" th:href="@{/}"><span>⌂</span> Inicio</a>
-<a th:classappend="${active == 'clientes'} ? ' selected' : ''" th:href="@{/clientes}"><span>♙</span> Clientes</a>
-<a th:classappend="${active == 'vehiculos'} ? ' selected' : ''" th:href="@{/vehiculos}"><span>◇</span> Vehículos</a>
-<a th:classappend="${active == 'mecanicos'} ? ' selected' : ''" th:href="@{/mecanicos}"><span>⚒</span> Mecánicos</a>
-<a th:classappend="${active == 'repuestos'} ? ' selected' : ''" th:href="@{/repuestos}"><span>▣</span> Repuestos</a>
-<a th:classappend="${active == 'servicios'} ? ' selected' : ''" th:href="@{/servicios}"><span>✧</span> Servicios</a>
-<a th:classappend="${active == 'ordenes'} ? ' selected' : ''" th:href="@{/ordenes}"><span>▤</span> Órdenes</a>
-<a th:classappend="${active == 'reportes'} ? ' selected' : ''" th:href="@{/reportes}"><span>&#9635;</span> Reportes</a>
-</nav>
-<div class="side-footer">Programación II · MVC<br><small>Java + Spring Boot + MySQL</small></div>
+  <svg class="icon-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol>
+    <symbol id="icon-car" viewBox="0 0 24 24"><path d="m5 11 1.7-5.2A2 2 0 0 1 8.6 4h6.8a2 2 0 0 1 1.9 1.8L19 11"/><path d="M5 11h14a2 2 0 0 1 2 2v5H3v-5a2 2 0 0 1 2-2Z"/><path d="M5 18v2M19 18v2M7 14h.01M17 14h.01"/></symbol>
+    <symbol id="icon-wrench" viewBox="0 0 24 24"><path d="M14.5 6.5a5 5 0 0 0-6.9 6.9l-5 5a2 2 0 1 0 2.8 2.8l5-5a5 5 0 0 0 6.9-6.9L14 13l-3-3z"/></symbol>
+    <symbol id="icon-gear" viewBox="0 0 24 24"><path d="M10 2h4l.6 2.5 1.7.7 2.2-1.3 2.8 2.8L20 9l.7 1.7L23 11v4l-2.3.3-.7 1.7 1.3 2.2-2.8 2.8-2.2-1.3-1.7.7L14 24h-4l-.6-2.5-1.7-.7-2.2 1.3-2.8-2.8L4 17l-.7-1.7L1 15v-4l2.3-.3L4 9 2.7 6.8l2.8-2.8 2.2 1.3 1.7-.7z" transform="translate(0,-1) scale(1,.96)"/><circle cx="12" cy="12" r="3.1"/></symbol>
+    <symbol id="icon-services" viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 4V2h6v2M8 9h8M8 13h8M8 17h5"/></symbol>
+    <symbol id="icon-file" viewBox="0 0 24 24"><path d="M6 2h8l5 5v15H6zM14 2v5h5M9 12h7M9 16h7"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+  </svg>
+  <a class="brand" th:href="@{/}"><span class="brand-mark">✦</span><span>El Último<br>Arranque</span></a>
+  <nav aria-label="Navegación principal" class="side-nav">
+    <a th:classappend="${active == 'inicio'} ? ' selected' : ''" th:href="@{/}"><span class="nav-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#icon-home"/></svg></span>Inicio</a>
+    <a th:classappend="${active == 'clientes'} ? ' selected' : ''" th:href="@{/clientes}"><span class="nav-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#icon-user"/></svg></span>Clientes</a>
+    <a th:classappend="${active == 'vehiculos'} ? ' selected' : ''" th:href="@{/vehiculos}"><span class="nav-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#icon-car"/></svg></span>Vehículos</a>
+    <a th:classappend="${active == 'mecanicos'} ? ' selected' : ''" th:href="@{/mecanicos}"><span class="nav-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#icon-wrench"/></svg></span>Mecánicos</a>
+    <a th:classappend="${active == 'repuestos'} ? ' selected' : ''" th:href="@{/repuestos}"><span class="nav-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#icon-gear"/></svg></span>Repuestos</a>
+    <a th:classappend="${active == 'servicios'} ? ' selected' : ''" th:href="@{/servicios}"><span class="nav-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#icon-services"/></svg></span>Servicios</a>
+    <a th:classappend="${active == 'ordenes'} ? ' selected' : ''" th:href="@{/ordenes}"><span class="nav-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#icon-file"/></svg></span>Órdenes</a>
+    <a th:classappend="${active == 'reportes'} ? ' selected' : ''" th:href="@{/reportes}"><span class="nav-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#icon-check"/></svg></span>Reportes</a>
+  </nav>
 </aside>
 <header th:fragment="topbar(title, subtitle)" class="topbar">
-<div><div class="top-eyebrow">EL ÚLTIMO ARRANQUE · GESTIÓN DEL TALLER</div><h1 th:text="${title}">Inicio</h1><p th:text="${subtitle}">Bienvenido</p></div>
-<div class="top-icon" aria-hidden="true">✦</div>
+  <div>
+    <h1 th:text="${title}">El Último Arranque</h1>
+    <p th:if="${subtitle != null and !#strings.isEmpty(subtitle)}" th:text="${subtitle}">Subtítulo</p>
+  </div>
+  <div class="top-icon" aria-hidden="true">✦</div>
 </header>
-</body></html>
-
+</body>
+</html>

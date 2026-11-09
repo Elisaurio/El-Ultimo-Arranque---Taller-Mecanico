@@ -12,7 +12,7 @@ if (conVehiculo && datosVehiculo) {
             campo.required = ahora && obligatorios.includes(campo.id);
         });
         if (guardarCliente) {
-            guardarCliente.textContent = ahora ? 'Guardar cliente y vehículo' : 'Guardar cliente (agregar vehículo más tarde)';
+            guardarCliente.textContent = ahora ? 'Guardar cliente y vehículo' : 'Guardar cliente';
         }
     };
     conVehiculo.addEventListener('change', actualizar);

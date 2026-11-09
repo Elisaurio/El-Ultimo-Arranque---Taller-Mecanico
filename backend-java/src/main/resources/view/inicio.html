@@ -1,15 +1,38 @@
-<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Inicio · El Último Arranque</title>
-<link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"><link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}"></head>
-<body><div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('inicio')}"></aside><main class="content">
-<header th:replace="~{fragments/layout :: topbar('¡Bienvenido al taller!','Clientes, vehículos y órdenes de trabajo en un solo lugar')}"></header>
-<section class="stats-grid"><div class="stat"><span>Clientes registrados</span><strong th:text="${totalClientes}">0</strong><small>MySQL</small></div><div class="stat"><span>Órdenes de trabajo</span><strong th:text="${totalOrdenes}">0</strong><small>En todos los estados</small></div><div class="stat"><span>Módulos activos</span><strong>6</strong><small>Catálogos y órdenes</small></div></section>
-<div class="section-title"><h2>Accesos rápidos</h2><span>Etapa 5</span></div><section class="feature-grid">
-<a class="feature" th:href="@{/clientes}"><span class="feature-icon">♙</span><div><h3>Clientes</h3><p>Clientes y sus vehículos</p></div><span class="feature-arrow">›</span></a>
-<a class="feature" th:href="@{/vehiculos}"><span class="feature-icon">◇</span><div><h3>Vehículos</h3><p>Placas, propietario e historial</p></div><span class="feature-arrow">›</span></a>
-<a class="feature" th:href="@{/mecanicos}"><span class="feature-icon">⚒</span><div><h3>Mecánicos</h3><p>Personal y especialidades</p></div><span class="feature-arrow">›</span></a>
-<a class="feature" th:href="@{/repuestos}"><span class="feature-icon">▣</span><div><h3>Repuestos</h3><p>Inventario y abastecimiento</p></div><span class="feature-arrow">›</span></a>
-<a class="feature" th:href="@{/servicios}"><span class="feature-icon">✧</span><div><h3>Servicios</h3><p>Catálogo y costo de mano de obra</p></div><span class="feature-arrow">›</span></a>
-<a class="feature" th:href="@{/ordenes}"><span class="feature-icon">▤</span><div><h3>Órdenes</h3><p>Crear, reparar, finalizar y cancelar</p></div><span class="feature-arrow">›</span></a>
-</section><div class="footer-note">MVC · Modelo: Java / service / repository · Vista: resources/view · Controlador: Java</div>
-</main></div></body></html>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicio · El Último Arranque</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css(v=ui6)}">
+  <link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}">
+</head>
+<body>
+<div class="app-shell">
+  <aside th:replace="~{fragments/layout :: sidebar('inicio')}"></aside>
+  <main class="content">
+    <header th:replace="~{fragments/layout :: topbar('¡Bienvenido al taller!','')}"></header>
+    <section class="stats-grid stats-grid--compact" aria-label="Resumen del taller">
+      <div class="stat stat-inline"><span>Clientes</span><strong th:text="${totalClientes}">0</strong></div>
+      <div class="stat stat-inline"><span>Órdenes</span><strong th:text="${totalOrdenes}">0</strong></div>
+      <div class="stat stat-inline"><span>Vehículos</span><strong th:text="${totalVehiculos}">0</strong></div>
+    </section>
+    <div class="section-title"><h2>Accesos rápidos</h2></div>
+    <section class="feature-grid feature-grid--three" aria-label="Accesos rápidos">
+      <a class="feature" th:href="@{/clientes}">
+        <span class="feature-icon"><svg class="feature-line-icon" aria-hidden="true"><use href="#icon-user"/></svg></span>
+        <div><h3>Clientes</h3><p>Consultar y registrar clientes</p></div><span class="feature-arrow">›</span>
+      </a>
+      <a class="feature" th:href="@{/repuestos}">
+        <span class="feature-icon"><svg class="feature-line-icon" aria-hidden="true"><use href="#icon-gear"/></svg></span>
+        <div><h3>Repuestos</h3><p>Catálogo e inventario</p></div><span class="feature-arrow">›</span>
+      </a>
+      <a class="feature" th:href="@{/ordenes/nueva}">
+        <span class="feature-icon"><svg class="feature-line-icon" aria-hidden="true"><use href="#icon-file"/></svg></span>
+        <div><h3>Crear nueva orden</h3><p>Iniciar una orden de trabajo</p></div><span class="feature-arrow">›</span>
+      </a>
+    </section>
+  </main>
+</div>
+</body>
+</html>
