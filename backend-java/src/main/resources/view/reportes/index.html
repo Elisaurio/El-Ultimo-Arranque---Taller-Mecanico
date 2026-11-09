@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reportes · El Último Arranque</title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}">
+  <link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}">
+  <link rel="stylesheet" th:href="@{/css/etapa6.css(v=1)}">
+</head>
+<body>
+<div class="app-shell">
+  <aside th:replace="~{fragments/layout :: sidebar('reportes')}"></aside>
+  <main class="content">
+    <header th:replace="~{fragments/layout :: topbar('Reportes del taller','Cinco reportes PDF construidos con Java y MySQL')}"></header>
+    <div class="page-actions"><h2>Centro de reportes</h2><span class="report-hint">Etapa 6 · Exportación PDF</span></div>
+    <p class="report-description">Selecciona los filtros y utiliza <strong>Descargar PDF</strong>. Los informes consultan datos reales de MySQL y se generan desde Java.</p>
+    <section class="report-grid">
+      <article class="report-card">
+        <span class="report-number">01</span>
+        <h3>Órdenes por estado</h3>
+        <p>Consulta todas las órdenes o filtra por una etapa de reparación.</p>
+        <form th:action="@{/reportes/pdf/ordenes-estado}" method="get">
+          <label for="estado">Estado de la orden</label>
+          <select id="estado" name="estado">
+            <option value="">Todos los estados</option>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="EN_PROCESO">En proceso</option>
+            <option value="FINALIZADA">Finalizada</option>
+            <option value="CANCELADA">Cancelada</option>
+          </select>
+          <button class="btn primary" type="submit">Descargar PDF</button>
+        </form>
+      </article>
+      <article class="report-card">
+        <span class="report-number">02</span>
+        <h3>Historial por vehículo</h3>
+        <p>Muestra las reparaciones registradas para una placa específica.</p>
+        <form th:action="@{/reportes/pdf/historial-vehiculo}" method="get">
+          <label for="placa">Placa del vehículo</label>
+          <input id="placa" name="placa" type="text" maxlength="20" required
+                 placeholder="Ej. P123ABC" autocomplete="off">
+          <button class="btn primary" type="submit">Descargar PDF</button>
+        </form>
+      </article>
+      <article class="report-card">
+        <span class="report-number">03</span>
+        <h3>Inventario bajo</h3>
+        <p>Incluye repuestos con 5 unidades o menos y destaca los agotados.</p>
+        <form th:action="@{/reportes/pdf/inventario-bajo}" method="get">
+          <div class="report-info">Umbral fijo: existencia ≤ 5</div>
+          <button class="btn primary" type="submit">Descargar PDF</button>
+        </form>
+      </article>
+      <article class="report-card">
+        <span class="report-number">04</span>
+        <h3>Órdenes por mecánico</h3>
+        <p>Permite comprobar cuántas órdenes tiene cada mecánico y su estado.</p>
+        <form th:action="@{/reportes/pdf/ordenes-mecanico}" method="get">
+          <label for="mecanicoId">Mecánico</label>
+          <select id="mecanicoId" name="mecanicoId">
+            <option value="">Todos los mecánicos</option>
+            <option th:each="m : ${mecanicos}" th:value="${m.id}"
+                    th:text="${m.nombre + ' (' + m.identificador + ')'}">Mecánico</option>
+          </select>
+          <button class="btn primary" type="submit">Descargar PDF</button>
+        </form>
+      </article>
+      <article class="report-card report-card-wide">
+        <span class="report-number">05</span>
+        <h3>Ingresos por reparaciones</h3>
+        <p>Solo contabiliza órdenes <strong>FINALIZADAS</strong>, tomando su fecha de finalización. Suma mano de obra y repuestos.</p>
+        <form th:action="@{/reportes/pdf/ingresos}" method="get">
+          <div class="report-date-grid">
+            <div><label for="desde">Desde</label><input id="desde" type="date" name="desde" required th:value="${inicioSugerido}"></div>
+            <div><label for="hasta">Hasta</label><input id="hasta" type="date" name="hasta" required th:value="${hoy}"></div>
+          </div>
+          <button class="btn primary" type="submit">Descargar PDF</button>
+        </form>
+      </article>
+    </section>
+    <div class="report-footer-note">La exportación incluye registros que coinciden con el filtro. Si todavía no hay resultados, el PDF lo indicará sin inventar datos.</div>
+  </main>
+</div>
+</body>
+</html>

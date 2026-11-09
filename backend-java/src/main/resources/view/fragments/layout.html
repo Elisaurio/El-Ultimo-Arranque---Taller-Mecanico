@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
+﻿<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
 <aside th:fragment="sidebar(active)" class="sidebar">
 <a class="brand" th:href="@{/}"><span class="brand-mark">✦</span><span>El Último<br>Arranque</span></a>
 <p class="side-label">PANEL DEL TALLER</p>
@@ -10,7 +10,7 @@
 <a th:classappend="${active == 'repuestos'} ? ' selected' : ''" th:href="@{/repuestos}"><span>▣</span> Repuestos</a>
 <a th:classappend="${active == 'servicios'} ? ' selected' : ''" th:href="@{/servicios}"><span>✧</span> Servicios</a>
 <a th:classappend="${active == 'ordenes'} ? ' selected' : ''" th:href="@{/ordenes}"><span>▤</span> Órdenes</a>
-<span class="disabled"><span>◫</span> Reportes <small>Etapa 6</small></span>
+<a th:classappend="${active == 'reportes'} ? ' selected' : ''" th:href="@{/reportes}"><span>&#9635;</span> Reportes</a>
 </nav>
 <div class="side-footer">Programación II · MVC<br><small>Java + Spring Boot + MySQL</small></div>
 </aside>
@@ -19,3 +19,4 @@
 <div class="top-icon" aria-hidden="true">✦</div>
 </header>
 </body></html>
+
