@@ -7,10 +7,10 @@
   <nav aria-label="Navegación principal" class="side-nav">
     <a th:classappend="${active == 'inicio'} ? ' selected' : ''" th:href="@{/}"><span>⌂</span> Inicio</a>
     <a th:classappend="${active == 'clientes'} ? ' selected' : ''" th:href="@{/clientes}"><span>♙</span> Clientes</a>
-    <span class="disabled"><span>◇</span> Vehículos <small>Próximamente</small></span>
-    <span class="disabled"><span>⚒</span> Mecánicos <small>Próximamente</small></span>
-    <span class="disabled"><span>▣</span> Repuestos <small>Próximamente</small></span>
-    <span class="disabled"><span>✧</span> Servicios <small>Próximamente</small></span>
+    <a th:classappend="${active == 'vehiculos'} ? ' selected' : ''" th:href="@{/vehiculos}"><span>◇</span> Vehículos</a>
+    <a th:classappend="${active == 'mecanicos'} ? ' selected' : ''" th:href="@{/mecanicos}"><span>⚒</span> Mecánicos</a>
+    <a th:classappend="${active == 'repuestos'} ? ' selected' : ''" th:href="@{/repuestos}"><span>▣</span> Repuestos</a>
+    <a th:classappend="${active == 'servicios'} ? ' selected' : ''" th:href="@{/servicios}"><span>✧</span> Servicios</a>
     <span class="disabled"><span>▤</span> Órdenes <small>Próximamente</small></span>
     <span class="disabled"><span>◫</span> Reportes <small>Próximamente</small></span>
   </nav>

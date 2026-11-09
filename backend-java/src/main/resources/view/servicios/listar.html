@@ -1,0 +1,7 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Servicios · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"></head><body>
+<div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('servicios')}"></aside><main class="content">
+<header th:replace="~{fragments/layout :: topbar('Servicios', 'Administración del taller')}"></header>
+<div class="page-actions"><h2>Servicios registrados</h2><div class="actions"><a class="btn primary" th:href="@{/servicios/nuevo}">+ Nuevo servicio</a></div></div>
+<div th:if="${exito}" class="notice success" th:text="${exito}"></div><div th:if="${error}" class="notice error" th:text="${error}"></div>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Codigo</th><th>Descripcion</th><th>Mano de obra</th><th>Acciones</th></tr></thead><tbody><tr th:each="r : ${registros}"><td th:text="${r.codigo}">—</td><td th:text="${r.descripcion}">—</td><td th:text="${r.costoManoObra}">—</td><td class="actions"><a th:href="@{/servicios/{id}/editar(id=${r.id})}">Editar</a><form th:action="@{/servicios/{id}/eliminar(id=${r.id})}" method="post" onsubmit="return confirm('¿Eliminar el registro?');"><button class="danger-link" type="submit">Eliminar</button></form></td></tr><tr th:if="${#lists.isEmpty(registros)}"><td colspan="4" class="empty">No hay registros todavía</td></tr></tbody></table></div></div>
+</main></div></body></html>
