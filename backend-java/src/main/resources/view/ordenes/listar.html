@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Órdenes · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"><link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}"></head>
+<body><div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('ordenes')}"></aside><main class="content">
+<header th:replace="~{fragments/layout :: topbar('Órdenes de trabajo','Control del ciclo de reparación')}"></header>
+<div class="page-actions"><h2>Órdenes registradas</h2><a class="btn primary" th:href="@{/ordenes/nueva}">+ Nueva orden</a></div>
+<div class="notice success" th:if="${exito}" th:text="${exito}"></div><div class="notice error" th:if="${error}" th:text="${error}"></div>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Orden</th><th>Vehículo</th><th>Cliente</th><th>Mecánico</th><th>Estado</th><th>Fecha</th><th>Total</th><th>Ver</th></tr></thead><tbody>
+<tr th:each="o : ${ordenes}"><td th:text="${'#' + o.id}">#1</td><td th:text="${o.placa}"></td><td th:text="${o.clienteNombre}"></td><td th:text="${o.mecanicoNombre}"></td><td><span class="status-pill" th:classappend="${o.estado}" th:text="${o.estado}"></span></td><td th:text="${#temporals.format(o.fechaCreacion,'dd/MM/yyyy HH:mm')}"></td><td th:text="${'Q ' + o.total}"></td><td><a th:href="@{/ordenes/{id}(id=${o.id})}">Detalle</a></td></tr>
+<tr th:if="${#lists.isEmpty(ordenes)}"><td colspan="8" class="empty">Todavía no hay órdenes. Registra un vehículo y un mecánico para empezar.</td></tr>
+</tbody></table></div></div>
+</main></div></body></html>

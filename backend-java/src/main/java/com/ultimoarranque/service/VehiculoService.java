@@ -1,6 +1,7 @@
 package com.ultimoarranque.service;
 import com.ultimoarranque.model.Vehiculo;
 import com.ultimoarranque.repository.VehiculoRepository;
+import com.ultimoarranque.repository.ClienteRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,16 +10,24 @@ import java.util.List;
 @Service
 public class VehiculoService {
     private final VehiculoRepository repo;
-    public VehiculoService(VehiculoRepository repo) {this.repo=repo;}
+    private final ClienteRepository clientes;
+    public VehiculoService(VehiculoRepository repo, ClienteRepository clientes) {
+        this.repo=repo;
+        this.clientes=clientes;
+    }
     @Transactional(readOnly=true)
     public List<Vehiculo> listar() {return repo.listar();}
     @Transactional(readOnly=true)
     public Vehiculo obtener(long id) {return repo.buscar(id).orElseThrow(()->new IllegalArgumentException("Vehiculo no encontrado"));}
     @Transactional
     public void guardar(Vehiculo obj) {
+        if (obj.getClienteId() == null) throw new IllegalArgumentException("Selecciona un cliente");
+        if (clientes.buscarPorId(obj.getClienteId()).isEmpty())
+            throw new IllegalArgumentException("El cliente seleccionado no existe");
+        if (obj.getPlaca() == null || obj.getPlaca().isBlank())
+            throw new IllegalArgumentException("La placa es obligatoria");
         obj.setPlaca(obj.getPlaca().trim().toUpperCase(java.util.Locale.ROOT));
-        if(repo.duplicado(obj.getPlaca(),obj.getId())) throw new IllegalArgumentException("El placa ya está registrado");
-        if(obj.getClienteId()==null) throw new IllegalArgumentException("Selecciona un cliente");
+        if(repo.duplicado(obj.getPlaca(),obj.getId())) throw new IllegalArgumentException("La placa ya está registrada");
         try {
             if(obj.getId()==null) repo.crear(obj);
             else if(repo.actualizar(obj)==0) throw new IllegalArgumentException("Vehiculo no encontrado");

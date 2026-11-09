@@ -1,31 +1,15 @@
-<!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inicio · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}">
-</head>
-<body>
-<div class="app-shell">
-  <aside th:replace="~{fragments/layout :: sidebar('inicio')}"></aside>
-  <main class="content">
-    <header th:replace="~{fragments/layout :: topbar('¡Bienvenido al taller!', 'Controla clientes, vehículos y órdenes desde un solo lugar')}"></header>
-    <section class="stats-grid">
-      <div class="stat"><span>Clientes registrados</span><strong th:text="${totalClientes}">0</strong><small>Datos reales en MySQL</small></div>
-      <div class="stat"><span>Órdenes de trabajo</span><strong>—</strong><small>Disponible en próximas etapas</small></div>
-      <div class="stat"><span>Repuestos en almacén</span><strong>—</strong><small>Disponible en próximas etapas</small></div>
-    </section>
-    <div class="section-title"><h2>Accesos rápidos</h2><span>Etapas 3 y 4</span></div>
-    <section class="feature-grid">
-      <a class="feature" th:href="@{/clientes}"><span class="feature-icon">♙</span><div><h3>Clientes</h3><p>Consulta, registra y edita los clientes del taller</p></div><span class="feature-arrow">›</span></a>
-      <a class="feature" th:href="@{/clientes/nuevo}"><span class="feature-icon">＋</span><div><h3>Nuevo cliente</h3><p>Agrega clientes con identificador único</p></div><span class="feature-arrow">›</span></a>
-      <a class="feature" th:href="@{/vehiculos}"><span class="feature-icon">◇</span><div><h3>Vehículos</h3><p>Placas, clientes e historial de órdenes</p></div><span class="feature-arrow">›</span></a>
-      <a class="feature" th:href="@{/mecanicos}"><span class="feature-icon">⚒</span><div><h3>Mecánicos</h3><p>Administración del personal</p></div><span class="feature-arrow">›</span></a>
-      <a class="feature" th:href="@{/repuestos}"><span class="feature-icon">▣</span><div><h3>Repuestos</h3><p>Inventario, precios y abastecimiento</p></div><span class="feature-arrow">›</span></a>
-      <a class="feature" th:href="@{/servicios}"><span class="feature-icon">✧</span><div><h3>Servicios</h3><p>Catálogo de mano de obra</p></div><span class="feature-arrow">›</span></a>
-      <a class="feature" th:href="@{/api/estado}" target="_blank"><span class="feature-icon">▣</span><div><h3>Estado del sistema</h3><p>Consulta el resultado de la conexión JDBC</p></div><span class="feature-arrow">›</span></a>
-    </section>
-    <div class="footer-note">Arquitectura MVC · Modelo: model / service / repository · Vista: resources/view · Controlador: controller</div>
-  </main>
-</div>
-</body>
-</html>
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Inicio · El Último Arranque</title>
+<link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"><link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}"></head>
+<body><div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('inicio')}"></aside><main class="content">
+<header th:replace="~{fragments/layout :: topbar('¡Bienvenido al taller!','Clientes, vehículos y órdenes de trabajo en un solo lugar')}"></header>
+<section class="stats-grid"><div class="stat"><span>Clientes registrados</span><strong th:text="${totalClientes}">0</strong><small>MySQL</small></div><div class="stat"><span>Órdenes de trabajo</span><strong th:text="${totalOrdenes}">0</strong><small>En todos los estados</small></div><div class="stat"><span>Módulos activos</span><strong>6</strong><small>Catálogos y órdenes</small></div></section>
+<div class="section-title"><h2>Accesos rápidos</h2><span>Etapa 5</span></div><section class="feature-grid">
+<a class="feature" th:href="@{/clientes}"><span class="feature-icon">♙</span><div><h3>Clientes</h3><p>Clientes y sus vehículos</p></div><span class="feature-arrow">›</span></a>
+<a class="feature" th:href="@{/vehiculos}"><span class="feature-icon">◇</span><div><h3>Vehículos</h3><p>Placas, propietario e historial</p></div><span class="feature-arrow">›</span></a>
+<a class="feature" th:href="@{/mecanicos}"><span class="feature-icon">⚒</span><div><h3>Mecánicos</h3><p>Personal y especialidades</p></div><span class="feature-arrow">›</span></a>
+<a class="feature" th:href="@{/repuestos}"><span class="feature-icon">▣</span><div><h3>Repuestos</h3><p>Inventario y abastecimiento</p></div><span class="feature-arrow">›</span></a>
+<a class="feature" th:href="@{/servicios}"><span class="feature-icon">✧</span><div><h3>Servicios</h3><p>Catálogo y costo de mano de obra</p></div><span class="feature-arrow">›</span></a>
+<a class="feature" th:href="@{/ordenes}"><span class="feature-icon">▤</span><div><h3>Órdenes</h3><p>Crear, reparar, finalizar y cancelar</p></div><span class="feature-arrow">›</span></a>
+</section><div class="footer-note">MVC · Modelo: Java / service / repository · Vista: resources/view · Controlador: Java</div>
+</main></div></body></html>

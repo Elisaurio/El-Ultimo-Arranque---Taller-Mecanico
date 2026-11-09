@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detalle de orden · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"><link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}"></head>
+<body><div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('ordenes')}"></aside><main class="content">
+<header th:replace="~{fragments/layout :: topbar('Detalle de orden','Servicios, repuestos y estados')}"></header>
+<div class="page-actions"><h2 th:text="${'Orden #' + orden.id}">Orden #</h2><a class="btn ghost" th:href="@{/ordenes}">Volver</a></div>
+<div class="notice success" th:if="${exito}" th:text="${exito}"></div><div class="notice error" th:if="${error}" th:text="${error}"></div>
+<div class="form-card wide">
+<div class="detail-head"><span class="status-pill" th:classappend="${orden.estado}" th:text="${orden.estado}"></span><span class="muted" th:text="${#temporals.format(orden.fechaCreacion,'dd/MM/yyyy HH:mm')}"></span></div>
+<dl class="detail-grid"><div><dt>Vehículo</dt><dd th:text="${orden.placa}"></dd></div><div><dt>Cliente</dt><dd th:text="${orden.clienteNombre}"></dd></div><div><dt>Mecánico</dt><dd th:text="${orden.mecanicoNombre}"></dd></div><div><dt>Problema</dt><dd th:text="${orden.problema}"></dd></div></dl>
+<div class="order-buttons">
+<form th:if="${orden.estado.name() == 'PENDIENTE'}" th:action="@{/ordenes/{id}/iniciar(id=${orden.id})}" method="post"><button class="btn primary" type="submit">Iniciar reparación</button></form>
+<form th:if="${orden.estado.name() == 'PENDIENTE' or orden.estado.name() == 'EN_PROCESO'}" th:action="@{/ordenes/{id}/cancelar(id=${orden.id})}" method="post" onsubmit="return confirm('¿Cancelar orden? Los repuestos serán reintegrados al inventario.');"><button class="btn ghost" type="submit">Cancelar orden</button></form>
+<form th:if="${enProceso}" th:action="@{/ordenes/{id}/finalizar(id=${orden.id})}" method="post" onsubmit="return confirm('¿Finalizar y bloquear esta orden? Debe contener al menos un servicio.');"><button class="btn primary" type="submit">Finalizar orden</button></form>
+<a th:if="${orden.estado.name() == 'FINALIZADA'}" class="btn primary" th:href="@{/ordenes/{id}/comprobante(id=${orden.id})}">Ver comprobante</a>
+</div>
+</div>
+<div class="page-actions"><h2>Servicios realizados</h2></div>
+<form class="form-card compact wide" th:if="${enProceso}" th:action="@{/ordenes/{id}/servicios(id=${orden.id})}" method="post">
+<div class="inline-form"><div class="field grow"><label for="servicioId">Servicio</label><select id="servicioId" name="servicioId" required><option value="">Selecciona servicio</option><option th:each="s : ${catalogoServicios}" th:value="${s.id}" th:text="${s.descripcion + ' · Q ' + s.costoManoObra}"></option></select></div><button class="btn primary" type="submit">+ Agregar servicio</button></div></form>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Descripción</th><th>Costo aplicado</th><th th:if="${enProceso}">Acción</th></tr></thead><tbody>
+<tr th:each="s : ${serviciosAplicados}"><td th:text="${s.descripcion}"></td><td th:text="${'Q ' + s.costoAplicado}"></td><td th:if="${enProceso}"><form th:action="@{/ordenes/{id}/servicios/{d}/quitar(id=${orden.id},d=${s.id})}" method="post"><button class="danger-link" type="submit">Quitar</button></form></td></tr>
+<tr th:if="${#lists.isEmpty(serviciosAplicados)}"><td class="empty" th:colspan="${enProceso} ? 3 : 2">No hay servicios registrados</td></tr>
+</tbody></table></div></div>
+<div class="page-actions"><h2>Repuestos utilizados</h2></div>
+<form class="form-card compact wide" th:if="${enProceso}" th:action="@{/ordenes/{id}/repuestos(id=${orden.id})}" method="post"><div class="inline-form"><div class="field grow"><label for="repuestoId">Repuesto</label><select id="repuestoId" name="repuestoId" required><option value="">Selecciona repuesto</option><option th:each="r : ${catalogoRepuestos}" th:value="${r.id}" th:text="${r.nombre + ' · disponibles: ' + r.existencia + ' · Q ' + r.precio}"></option></select></div><div class="field small-input"><label for="cantidad">Cantidad</label><input id="cantidad" name="cantidad" type="number" required min="1" value="1"></div><button class="btn primary" type="submit">+ Asignar repuesto</button></div></form>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Repuesto</th><th>Cantidad</th><th>Precio unitario</th><th>Subtotal</th><th th:if="${enProceso}">Acción</th></tr></thead><tbody>
+<tr th:each="r : ${repuestosAplicados}"><td th:text="${r.nombre}"></td><td th:text="${r.cantidad}"></td><td th:text="${'Q ' + r.precioUnitarioAplicado}"></td><td th:text="${'Q ' + r.subtotal}"></td><td th:if="${enProceso}"><form th:action="@{/ordenes/{id}/repuestos/{d}/quitar(id=${orden.id},d=${r.id})}" method="post"><button class="danger-link" type="submit">Quitar y devolver</button></form></td></tr>
+<tr th:if="${#lists.isEmpty(repuestosAplicados)}"><td class="empty" th:colspan="${enProceso} ? 5 : 4">No se han asignado repuestos</td></tr>
+</tbody></table></div></div>
+<div class="totals-card"><div><span>Mano de obra</span><strong th:text="${'Q ' + manoObra}"></strong></div><div><span>Repuestos</span><strong th:text="${'Q ' + repuestosTotal}"></strong></div><div class="grand-total"><span th:text="${orden.estado.name() == 'FINALIZADA'} ? 'Total facturado' : 'Total estimado'">Total</span><strong th:text="${'Q ' + manoObra.add(repuestosTotal)}"></strong></div></div>
+<p class="muted" th:if="${orden.estado.name() == 'CANCELADA'}">Orden cancelada: los repuestos asignados se conservan en el historial, pero se devolvieron al inventario. No representa un cobro.</p>
+</main></div></body></html>

@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Detalle de cliente · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}">
-</head><body><div class="app-shell">
-<aside th:replace="~{fragments/layout :: sidebar('clientes')}"></aside>
-<main class="content">
-<header th:replace="~{fragments/layout :: topbar('Detalle de cliente', 'Información registrada en MySQL')}"></header>
-<div class="page-actions"><h2 th:text="${cliente.nombre}">Cliente</h2><a class="btn ghost" th:href="@{/clientes}">Volver al listado</a></div>
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detalle de cliente · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"><link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}"></head>
+<body><div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('clientes')}"></aside><main class="content">
+<header th:replace="~{fragments/layout :: topbar('Ficha del cliente','Cliente con cero o varios vehículos')}"></header>
+<div class="page-actions"><h2 th:text="${cliente.nombre}">Cliente</h2><a class="btn ghost" th:href="@{/clientes}">Volver</a></div>
 <div class="form-card"><dl class="detail-grid"><div><dt>Identificador</dt><dd th:text="${cliente.identificador}"></dd></div><div><dt>Nombre</dt><dd th:text="${cliente.nombre}"></dd></div><div><dt>Teléfono</dt><dd th:text="${cliente.telefono}"></dd></div><div><dt>Correo</dt><dd th:text="${cliente.correo}"></dd></div><div><dt>Dirección</dt><dd th:text="${cliente.direccion}"></dd></div></dl>
-<div class="form-actions"><a class="btn primary" th:href="@{/clientes/{id}/editar(id=${cliente.id})}">Editar cliente</a></div></div>
+<div class="form-actions"><a class="btn ghost" th:href="@{/clientes/{id}/editar(id=${cliente.id})}">Editar datos</a></div></div>
+<div class="page-actions"><h2>Vehículos del cliente</h2><a class="btn primary" th:href="@{/vehiculos/nuevo(clienteId=${cliente.id})}">+ Agregar vehículo</a></div>
+<div class="table-card"><div class="table-scroll"><table><thead><tr><th>Placa</th><th>Marca</th><th>Modelo</th><th>Año</th><th>Acciones</th></tr></thead><tbody>
+<tr th:each="v : ${vehiculos}"><td th:text="${v.placa}"></td><td th:text="${v.marca}"></td><td th:text="${v.modelo}"></td><td th:text="${v.anio}"></td><td><a th:href="@{/vehiculos/{id}(id=${v.id})}">Ver historial</a></td></tr>
+<tr th:if="${#lists.isEmpty(vehiculos)}"><td colspan="5" class="empty">Este cliente todavía no tiene vehículos. Puedes agregarlos cuando quieras.</td></tr>
+</tbody></table></div></div>
 </main></div></body></html>

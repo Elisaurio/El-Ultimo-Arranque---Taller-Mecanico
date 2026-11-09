@@ -1,0 +1,13 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nueva orden · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"><link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}"></head>
+<body><div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('ordenes')}"></aside><main class="content">
+<header th:replace="~{fragments/layout :: topbar('Nueva orden de trabajo','Comienza en estado PENDIENTE')}"></header>
+<div class="page-actions"><h2>Datos de recepción</h2><a class="btn ghost" th:href="@{/ordenes}">Volver</a></div>
+<form class="form-card" th:action="@{/ordenes/crear}" th:object="${registro}" method="post">
+<div class="notice error" th:if="${#fields.hasGlobalErrors()}"><p th:each="e : ${#fields.globalErrors()}" th:text="${e}"></p></div>
+<div class="form-grid"><div class="field"><label for="vehiculoId">Vehículo *</label><select id="vehiculoId" th:field="*{vehiculoId}" required><option value="">Selecciona una placa</option><option th:each="v : ${vehiculos}" th:value="${v.id}" th:text="${v.placa + ' · ' + v.marca + ' ' + v.modelo}"></option></select><small class="validation" th:errors="*{vehiculoId}"></small></div>
+<div class="field"><label for="mecanicoId">Mecánico *</label><select id="mecanicoId" th:field="*{mecanicoId}" required><option value="">Selecciona un mecánico</option><option th:each="m : ${mecanicos}" th:value="${m.id}" th:text="${m.nombre}"></option></select><small class="validation" th:errors="*{mecanicoId}"></small></div>
+<div class="field full"><label for="problema">Descripción del problema *</label><textarea id="problema" th:field="*{problema}" rows="5" required maxlength="5000" placeholder="Describe la falla y las observaciones de recepción"></textarea><small class="validation" th:errors="*{problema}"></small></div></div>
+<div class="info-line">Los servicios y repuestos se registrarán al iniciar la reparación. Los vehículos deben tener un cliente asignado.</div>
+<div class="form-actions"><a class="btn ghost" th:href="@{/ordenes}">Cancelar</a><button class="btn primary" type="submit">Crear orden pendiente</button></div>
+</form></main></div></body></html>

@@ -1,9 +1,17 @@
-<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Formulario · Vehículos</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"></head><body><div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('vehiculos')}"></aside><main class="content"><header th:replace="~{fragments/layout :: topbar('Vehículos', 'Registro y edición')}"></header>
-<div class="page-actions"><h2 th:text="${registro.id == null} ? 'Nuevo vehículo' : 'Editar vehículo'">Formulario</h2><a class="btn ghost" th:href="@{/vehiculos}">Volver</a></div>
-<form class="form-card" th:object="${registro}" th:action="@{/vehiculos/guardar}" method="post"><input type="hidden" th:field="*{id}"><div class="notice error" th:if="${#fields.hasGlobalErrors()}"><p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p></div><div class="form-grid"><div class="field"><label for="clienteId">Cliente propietario</label><select th:field="*{clienteId}" required><option value="">Selecciona un cliente</option><option th:each="c : ${clientes}" th:value="${c.id}" th:text="${c.identificador + ' · ' + c.nombre}"></option></select><small class="validation" th:errors="*{clienteId}"></small></div>
-<div class="field"><label for="placa">Placa</label><input th:field="*{placa}" required /><small class="validation" th:errors="*{placa}"></small></div>
-<div class="field"><label for="marca">Marca</label><input th:field="*{marca}" required /><small class="validation" th:errors="*{marca}"></small></div>
-<div class="field"><label for="modelo">Modelo</label><input th:field="*{modelo}" required /><small class="validation" th:errors="*{modelo}"></small></div>
-<div class="field"><label for="anio">Año</label><input type="number" th:field="*{anio}" step="1" min="1900" max="2100"><small class="validation" th:errors="*{anio}"></small></div>
-<div class="field"><label for="color">Color</label><input th:field="*{color}" /><small class="validation" th:errors="*{color}"></small></div>
-</div><div class="form-actions"><a class="btn ghost" th:href="@{/vehiculos}">Cancelar</a><button class="btn primary" type="submit">Guardar</button></div></form></main></div></body></html>
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vehículos · El Último Arranque</title><link rel="stylesheet" th:href="@{/css/estilos.css(v=etapa34)}"><link rel="stylesheet" th:href="@{/css/etapa5.css(v=1)}"></head>
+<body><div class="app-shell"><aside th:replace="~{fragments/layout :: sidebar('vehiculos')}"></aside><main class="content">
+<header th:replace="~{fragments/layout :: topbar('Vehículos','Registro con propietario obligatorio')}"></header>
+<div class="page-actions"><h2 th:text="${registro.id == null} ? 'Nuevo vehículo' : 'Editar vehículo'">Vehículo</h2><a class="btn ghost" th:href="@{/vehiculos}">Volver</a></div>
+<form class="form-card" th:object="${registro}" th:action="@{/vehiculos/guardar}" method="post"><input type="hidden" th:field="*{id}">
+<div class="notice error" th:if="${#fields.hasGlobalErrors()}"><p th:each="e : ${#fields.globalErrors()}" th:text="${e}"></p></div>
+<div class="info-line">Un vehículo debe pertenecer a exactamente un cliente. Si todavía no existe, <a th:href="@{/clientes/nuevo}">crea al cliente primero</a>.</div>
+<div class="form-grid spaced">
+<div class="field full"><label for="clienteId">Asignar cliente *</label><select id="clienteId" th:field="*{clienteId}" required><option value="">Selecciona un cliente</option><option th:each="c : ${clientes}" th:value="${c.id}" th:text="${c.identificador + ' · ' + c.nombre}">Cliente</option></select><small class="validation" th:errors="*{clienteId}"></small></div>
+<div class="field"><label for="placa">Placa *</label><input id="placa" th:field="*{placa}" maxlength="20" required><small class="validation" th:errors="*{placa}"></small></div>
+<div class="field"><label for="marca">Marca *</label><input id="marca" th:field="*{marca}" maxlength="70" required><small class="validation" th:errors="*{marca}"></small></div>
+<div class="field"><label for="modelo">Modelo *</label><input id="modelo" th:field="*{modelo}" maxlength="70" required><small class="validation" th:errors="*{modelo}"></small></div>
+<div class="field"><label for="anio">Año</label><input type="number" id="anio" th:field="*{anio}" min="1900" max="2100"><small class="validation" th:errors="*{anio}"></small></div>
+<div class="field"><label for="color">Color</label><input id="color" th:field="*{color}" maxlength="50"><small class="validation" th:errors="*{color}"></small></div>
+</div><div class="form-actions"><a class="btn ghost" th:href="@{/vehiculos}">Cancelar</a><button class="btn primary" type="submit">Guardar vehículo</button></div>
+</form></main></div></body></html>

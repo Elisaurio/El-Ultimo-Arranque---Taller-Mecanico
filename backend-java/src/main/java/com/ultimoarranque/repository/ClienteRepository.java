@@ -29,7 +29,8 @@ public class ClienteRepository {
     };
 
     public List<Cliente> listar() {
-        return jdbc.query("SELECT id,identificador,nombre,telefono,correo,direccion FROM clientes ORDER BY id DESC", mapper);
+        return jdbc.query(con -> con.prepareStatement(
+            "SELECT id,identificador,nombre,telefono,correo,direccion FROM clientes ORDER BY id DESC"), mapper);
     }
 
     public Optional<Cliente> buscarPorId(long id) {
@@ -85,7 +86,8 @@ public class ClienteRepository {
     }
 
     public int contar() {
-        Integer count = jdbc.query("SELECT COUNT(*) FROM clientes", rs -> rs.next() ? rs.getInt(1) : 0);
+        Integer count = jdbc.query(con -> con.prepareStatement("SELECT COUNT(*) FROM clientes"),
+            rs -> rs.next() ? rs.getInt(1) : 0);
         return count == null ? 0 : count;
     }
 }
