@@ -1,3 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">El Ultimo Arranque</string>
+    <string name="app_name">El Último Arranque</string>
+    <string name="nombre_taller">EL ÚLTIMO ARRANQUE</string>
+    <string name="reporte_title">Inventario bajo</string>
+    <string name="reporte_subtitle">Repuestos con 5 unidades o menos</string>
+    <string name="servidor_label">Dirección de tu servidor local</string>
+    <string name="servidor_hint">http://10.0.2.2:8080</string>
+    <string name="btn_conectar">Guardar servidor y consultar</string>
+    <string name="btn_actualizar">Actualizar reporte</string>
+    <string name="btn_pdf">Abrir PDF</string>
+    <string name="items_label">Repuestos encontrados</string>
+    <string name="state_initial">Conectando al servidor…</string>
+    <string name="empty_title">Sin inventario bajo</string>
+    <string name="empty_subtitle">No hay repuestos con existencias menores o iguales a cinco.</string>
+    <string name="label_total">Repuestos con alerta</string>
+    <string name="estado_sin_datos">Pendiente de consulta</string>
 </resources>

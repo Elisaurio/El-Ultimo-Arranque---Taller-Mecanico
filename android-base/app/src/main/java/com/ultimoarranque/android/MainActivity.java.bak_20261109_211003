@@ -1,0 +1,219 @@
+package com.ultimoarranque.android;
+
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.ultimoarranque.android.api.ReporteApiClient;
+import com.ultimoarranque.android.model.RepuestoBajo;
+
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public final class MainActivity extends Activity {
+    private static final String PREFS = "servidor_local";
+    private static final String PREF_URL = "url_base";
+    private static final String URL_EMULADOR = "http://10.0.2.2:8080";
+    private static final String RUTA_PDF = "/reportes/pdf/inventario-bajo";
+
+    private final ExecutorService ejecutor = Executors.newSingleThreadExecutor();
+    private final ReporteApiClient apiClient = new ReporteApiClient();
+    private final NumberFormat formatoPrecio = NumberFormat.getNumberInstance(new Locale("es", "GT"));
+
+    private EditText editServidor;
+    private TextView txtEstado;
+    private TextView txtTotal;
+    private TextView txtBadge;
+    private TextView txtVacioTitulo;
+    private TextView txtVacioSubtitulo;
+    private LinearLayout contenedorRepuestos;
+    private LinearLayout panelVacio;
+    private Button btnActualizar;
+    private Button btnConectar;
+    private Button btnPdf;
+    private int ultimoPedido = 0;
+    private boolean destruida = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        editServidor = findViewById(R.id.editServidor);
+        txtEstado = findViewById(R.id.txtEstado);
+        txtTotal = findViewById(R.id.txtTotal);
+        txtBadge = findViewById(R.id.txtBadge);
+        txtVacioTitulo = findViewById(R.id.txtVacioTitulo);
+        txtVacioSubtitulo = findViewById(R.id.txtVacioSubtitulo);
+        contenedorRepuestos = findViewById(R.id.contenedorRepuestos);
+        panelVacio = findViewById(R.id.panelVacio);
+        btnActualizar = findViewById(R.id.btnActualizar);
+        btnConectar = findViewById(R.id.btnConectar);
+        btnPdf = findViewById(R.id.btnPdf);
+
+        formatoPrecio.setMinimumFractionDigits(2);
+        formatoPrecio.setMaximumFractionDigits(2);
+
+        String direccionGuardada = getSharedPreferences(PREFS, MODE_PRIVATE)
+                .getString(PREF_URL, URL_EMULADOR);
+        editServidor.setText(direccionGuardada);
+
+        btnConectar.setOnClickListener(v -> guardarServidor());
+        btnActualizar.setOnClickListener(v -> cargarInventario());
+        btnPdf.setOnClickListener(v -> abrirPdf());
+
+        cargarInventario();
+    }
+
+    private String direccionBase() {
+        String valor = editServidor.getText().toString().trim();
+        while (valor.endsWith("/")) {
+            valor = valor.substring(0, valor.length() - 1);
+        }
+        return valor;
+    }
+
+    private boolean validarDireccion(String base) {
+        if (!(base.startsWith("http://") || base.startsWith("https://"))) {
+            editServidor.setError("Usa una URL como http://10.0.2.2:8080");
+            editServidor.requestFocus();
+            return false;
+        }
+        Uri uri = Uri.parse(base);
+        if (uri.getHost() == null || uri.getHost().isEmpty() || uri.getPort() < -1) {
+            editServidor.setError("La dirección del servidor no es válida");
+            editServidor.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private void guardarServidor() {
+        String base = direccionBase();
+        if (!validarDireccion(base)) {
+            return;
+        }
+        getSharedPreferences(PREFS, MODE_PRIVATE)
+                .edit().putString(PREF_URL, base).apply();
+        Toast.makeText(this, "Servidor guardado", Toast.LENGTH_SHORT).show();
+        cargarInventario();
+    }
+
+    private void cargarInventario() {
+        String urlBase = direccionBase();
+        if (!validarDireccion(urlBase)) {
+            return;
+        }
+        getSharedPreferences(PREFS, MODE_PRIVATE)
+                .edit().putString(PREF_URL, urlBase).apply();
+
+        int pedidoActual = ++ultimoPedido;
+        btnActualizar.setEnabled(false);
+        btnConectar.setEnabled(false);
+        txtEstado.setText("Consultando inventario en MySQL…");
+        txtBadge.setText("CARGANDO");
+        contenedorRepuestos.removeAllViews();
+        panelVacio.setVisibility(View.GONE);
+
+        ejecutor.execute(() -> {
+            try {
+                List<RepuestoBajo> repuestos = apiClient.consultarInventarioBajo(urlBase);
+                runOnUiThread(() -> {
+                    if (destruida || pedidoActual != ultimoPedido) return;
+                    mostrarResultados(repuestos);
+                });
+            } catch (IOException | RuntimeException error) {
+                runOnUiThread(() -> {
+                    if (destruida || pedidoActual != ultimoPedido) return;
+                    mostrarError(error);
+                });
+            }
+        });
+    }
+
+    private void mostrarResultados(List<RepuestoBajo> repuestos) {
+        btnActualizar.setEnabled(true);
+        btnConectar.setEnabled(true);
+        txtTotal.setText(String.valueOf(repuestos.size()));
+        txtEstado.setText("Conectado · Datos actualizados desde el taller");
+        txtBadge.setText(repuestos.isEmpty() ? "SIN ALERTAS" : "INVENTARIO BAJO");
+        txtBadge.setBackgroundResource(repuestos.isEmpty()
+                ? R.drawable.bg_success : R.drawable.bg_warning);
+        txtBadge.setTextColor(getColor(repuestos.isEmpty()
+                ? R.color.success_text : R.color.warning_text));
+
+        contenedorRepuestos.removeAllViews();
+        panelVacio.setVisibility(repuestos.isEmpty() ? View.VISIBLE : View.GONE);
+        for (RepuestoBajo repuesto : repuestos) {
+            View tarjeta = LayoutInflater.from(this)
+                    .inflate(R.layout.item_repuesto, contenedorRepuestos, false);
+            TextView nombre = tarjeta.findViewById(R.id.txtNombre);
+            TextView precio = tarjeta.findViewById(R.id.txtPrecio);
+            TextView codigo = tarjeta.findViewById(R.id.txtCodigo);
+            TextView existencia = tarjeta.findViewById(R.id.txtExistencia);
+
+            nombre.setText(repuesto.getNombre());
+            precio.setText("Q " + formatoPrecio.format(repuesto.getPrecio()));
+            codigo.setText("Código: " + repuesto.getCodigo());
+            int cantidad = repuesto.getExistencia();
+            existencia.setText(cantidad == 0 ? "AGOTADO" : cantidad + " unidades");
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.bottomMargin = dp(10);
+            contenedorRepuestos.addView(tarjeta, params);
+        }
+    }
+
+    private void mostrarError(Exception error) {
+        btnActualizar.setEnabled(true);
+        btnConectar.setEnabled(true);
+        txtTotal.setText("—");
+        txtBadge.setText("SIN CONEXIÓN");
+        txtBadge.setBackgroundResource(R.drawable.bg_warning);
+        txtBadge.setTextColor(getColor(R.color.warning_text));
+        txtEstado.setText("No se pudo consultar el servidor: " + error.getMessage());
+        txtVacioTitulo.setText("No fue posible conectar");
+        txtVacioSubtitulo.setText("Comprueba que Spring Boot esté encendido y que la URL sea correcta.");
+        panelVacio.setVisibility(View.VISIBLE);
+    }
+
+    private void abrirPdf() {
+        String base = direccionBase();
+        if (!validarDireccion(base)) {
+            return;
+        }
+        Intent navegador = new Intent(Intent.ACTION_VIEW, Uri.parse(base + RUTA_PDF));
+        try {
+            startActivity(navegador);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No hay navegador disponible para abrir el PDF", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private int dp(int valor) {
+        return (int) (valor * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
+    @Override
+    protected void onDestroy() {
+        destruida = true;
+        ultimoPedido++;
+        ejecutor.shutdownNow();
+        super.onDestroy();
+    }
+}
